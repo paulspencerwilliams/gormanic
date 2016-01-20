@@ -1,7 +1,8 @@
 (ns gormanic.core-test
   (:require [clojure.test :refer :all]
-            [gormanic.core :refer :all]))
+            [gormanic.core :refer :all]
+            [clj-time.core :as t]))
 
-(deftest a-test
-  (testing "FIXME, I fail."
-    (is (= 0 1))))
+(deftest simple-case
+  (testing "1 January 2015"
+    (is (= "1 March 2015" (convert (t/date-time 2015 1 1))))))
