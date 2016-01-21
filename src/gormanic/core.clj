@@ -14,13 +14,14 @@
              "February",
              "Gormanuary"])
 
-(defn month-index [day-of-year] (quot (- day-of-year 1) 28))
 
 (defn day-of-month [day-of-year] (+ (rem (- day-of-year 1) 28) 1))
 
-(defn year [gregorian-date] (.get (.year gregorian-date)))
-
 (defn day-of-year [gregorian-date] (.get (.dayOfYear gregorian-date)))
+
+(defn month-index [day-of-year] (quot (- day-of-year 1) 28))
+
+(defn year [gregorian-date] (.get (.year gregorian-date)))
 
 (defn convert
   [gregorian-date]
