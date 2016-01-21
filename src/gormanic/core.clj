@@ -1,21 +1,33 @@
 (ns gormanic.core)
 
-(def months [ "March", "April", "May",
-  "June",
-  "Quintilis",
-  "Sextilis",
-  "September",
-  "October",
-  "November",
-  "December",
-  "January",
-  "February",
-  "Gormanuary"])
+(def months ["March",
+             "April",
+             "May",
+             "June",
+             "Quintilis",
+             "Sextilis",
+             "September",
+             "October",
+             "November",
+             "December",
+             "January",
+             "February",
+             "Gormanuary"])
+
+(defn month-index [day-of-year] (quot (- day-of-year 1)  28))
+
+(defn day-of-month [day-of-year] (+  (rem (- day-of-year 1)  28) 1 ))
+
+(defn year [gregorian-date] (.get (.year gregorian-date)) )
+
+(defn day-of-year [gregorian-date] (.get (.dayOfYear gregorian-date)))
 
 (defn convert
   [gregorian-date]
-  (let [day-of-year (.get (.dayOfYear gregorian-date))
-        year (.get (.year gregorian-date))
-        month-index (- (rem day-of-year 28) 1)
-        day-index (+ (quot day-of-year 28) 1) ]
-      (str day-index " " (months month-index) " " year)))
+  (let [day (day-of-year gregorian-date)]
+    (str
+      (day-of-month day)
+      " "
+      (months (month-index day))
+      " "
+      (year gregorian-date))))
