@@ -3,7 +3,7 @@
             [gormanic.core :refer :all]
             [clj-time.core :as t]))
 
-(deftest testing-stuff
+(deftest output-tests
   (testing "pre leap year"
     (is (= "1 March 2016" (convert (t/date-time 2016 1 1))))
     (is (= "1 April 2016" (convert (t/date-time 2016 1 29))))
