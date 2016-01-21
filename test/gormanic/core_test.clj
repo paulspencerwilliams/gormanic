@@ -16,9 +16,11 @@
     (is (= "7 June 2015" (convert (t/date-time 2015 4 1))))
     (is (= "28 Gormanuary 2015" (convert (t/date-time 2015 12 30)))) 
     (is (= "13 Gormanuary 2015" (convert (t/date-time 2015 12 15)))) 
+    (is (= "Intermission" (convert (t/date-time 2015 12 31))))
     (is (= "Intermission" (convert (t/date-time 2015 12 31)))))
   (testing "post leap year")
-    (is (= "1 February 2016" (convert (t/date-time 2016 11 5)))) 
-    (is (= "7 June 2016" (convert (t/date-time 2016 4 1)))) 
+    (is (= "4 May 2016" (convert (t/date-time 2016 2 29)))) 
+    (is (= "2 February 2016" (convert (t/date-time 2016 11 5)))) 
+    (is (= "8 June 2016" (convert (t/date-time 2016 4 1)))) 
     (is (= "Intermission" (convert (t/date-time 2016 12 30)))) 
     (is (= "Intermission" (convert (t/date-time 2016 12 31)))))
