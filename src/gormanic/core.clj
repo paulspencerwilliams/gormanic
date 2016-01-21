@@ -24,10 +24,15 @@
 
 (defn convert
   [gregorian-date]
-  (let [day (day-of-year gregorian-date)]
-    (str
-      (day-of-month day)
-      " "
-      (months (month-index day))
-      " "
-      (year gregorian-date))))
+  (let [day (day-of-year gregorian-date)
+        month (month-index day)]
+    (if (< month 13)
+      (str
+        (day-of-month day)
+        " "
+        (months month)
+        " "
+        (year gregorian-date))
+      "Intermission"
+      )
+    ))
