@@ -36,7 +36,7 @@
 
 (defn gormanic-to-string [gormanic]
   (if (:intermission gormanic)
-    "Intermission"
+    (str "Intermission " (:year gormanic))
     (str (:day gormanic) " " (gormanic-months (:month gormanic)) " " (:year gormanic))))
 
 (defn parts-to-gormanic [parts]
