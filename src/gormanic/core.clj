@@ -19,24 +19,22 @@
 
 (defn gormanic-month-index [day-of-year] (+ (quot (- day-of-year 1) 28) 1))
 
-(defn gregorian-to-parts [gregorian-date]
-  {:day  (.get (.dayOfYear gregorian-date))
-   :year (.get (.year gregorian-date))})
-
-(defn gormanic-to-parts [gormanic]
-  {:day
-         (if (:intermission gormanic)
-           365
-           (+ (* (- (:month gormanic) 1) 28) (:day gormanic)))
-   :year (:year gormanic)})
-
-(defn parts-to-gormanic [parts]
-  (let [day (:day parts)]
+(defn gregorian-to-gormanic
+  [gregorian]
+  (let [day  (.get (.dayOfYear gregorian))
+        year (.get (.year gregorian))]
     (if (>= day 365)
-      {:year (:year parts) :intermission true}
-      {:year  (:year parts)
+      {:year year :intermission true}
+      {:year  year
        :month (gormanic-month-index day)
        :day   (gormanic-day-index day)})))
+
+(defn gormanic-to-gregorian [gormanic]
+  (let [day (if (:intermission gormanic)
+              365
+              (+ (* (- (:month gormanic) 1) 28) (:day gormanic)))
+        year (:year gormanic)]
+  (.plusDays (t/date-time year 1 1) (- day 1))))
 
 (defn gormanic-to-string [gormanic]
   (if (:intermission gormanic)
@@ -44,18 +42,7 @@
     (str (:day gormanic) " "
          (gormanic-months (- (:month gormanic) 1)) " " (:year gormanic))))
 
-(defn gregorian-to-gormanic
-  [gregorian]
-  (parts-to-gormanic
-    (gregorian-to-parts gregorian)))
-
 (defn gregorian-to-gormanic-string
   [gregorian]
   (gormanic-to-string (gregorian-to-gormanic gregorian)))
 
-(defn parts-to-gregorian [parts]
-  (.plusDays (t/date-time (:year parts) 1 1) (- (:day parts) 1)))
-
-(defn gormanic-to-gregorian
-  [gormanic]
-  (parts-to-gregorian (gormanic-to-parts gormanic)))
