@@ -22,7 +22,7 @@
   (or (= original (.toLocalDate roundtripped))
       (and (is2ndIntermission original) (is1stIntermission roundtripped))))
 
-(defspec dates-are-reversable 10000
+(defspec dates-are-roundtrippable 10000
          (prop/for-all
            [d (gen/fmap
                 timestamp-to-date
