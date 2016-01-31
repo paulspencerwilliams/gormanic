@@ -26,7 +26,7 @@
          (prop/for-all
            [d (gen/fmap
                 timestamp-to-date
-                (gen/choose -17987443200 19880899200))]
+                (gen/large-integer* {:min -17987443200 :max 19880899200}))]
            (equal-ignoring-leap-year-intermission
              d (to-gregorian (to-gormanic d)))))
 
