@@ -19,9 +19,9 @@
 
 (defn gormanic-month-index [day-of-year] (+ (quot (- day-of-year 1) 28) 1))
 
-(defn gregorian-to-gormanic
+(defn to-gormanic
   [gregorian]
-  (let [day  (.get (.dayOfYear gregorian))
+  (let [day (.get (.dayOfYear gregorian))
         year (.get (.year gregorian))]
     (if (>= day 365)
       {:year year :intermission true}
@@ -29,20 +29,17 @@
        :month (gormanic-month-index day)
        :day   (gormanic-day-index day)})))
 
-(defn gormanic-to-gregorian [gormanic]
+(defn to-gregorian [gormanic]
   (let [day (if (:intermission gormanic)
               365
               (+ (* (- (:month gormanic) 1) 28) (:day gormanic)))
         year (:year gormanic)]
-  (.plusDays (t/date-time year 1 1) (- day 1))))
+    (.plusDays (t/date-time year 1 1) (- day 1))))
 
-(defn gormanic-to-string [gormanic]
-  (if (:intermission gormanic)
-    (str "Intermission " (:year gormanic))
-    (str (:day gormanic) " "
-         (gormanic-months (- (:month gormanic) 1)) " " (:year gormanic))))
-
-(defn gregorian-to-gormanic-string
+(defn to-gormanic-string
   [gregorian]
-  (gormanic-to-string (gregorian-to-gormanic gregorian)))
-
+  (let [gormanic (to-gormanic gregorian)]
+    (if (:intermission gormanic)
+      (str "Intermission " (:year gormanic))
+      (str (:day gormanic) " "
+           (gormanic-months (- (:month gormanic) 1)) " " (:year gormanic)))))
