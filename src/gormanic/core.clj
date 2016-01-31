@@ -1,4 +1,5 @@
-(ns gormanic.core)
+(ns gormanic.core
+  (:require [clj-time.core :as t]))
 
 (def gormanic-months ["March",
              "April",
@@ -14,10 +15,9 @@
              "February",
              "Gormanuary"])
 
-
 (defn gormanic-day-index [day-of-year] (+ (rem (- day-of-year 1) 28) 1))
 
-(defn gormanic-month-index [day-of-year] (quot (- day-of-year 1) 28))
+(defn gormanic-month-index [day-of-year] (+ (quot (- day-of-year 1) 28) 1))
 
 (defn gregorian-to-parts [gregorian-date]
   {:day (.get (.dayOfYear gregorian-date))
@@ -25,19 +25,10 @@
 
 (defn gormanic-to-parts [gormanic]
   {:day
-         (if [:intermission gormanic]
+         (if (:intermission gormanic)
           365
-          (.indexOf gormanic.core/gormanic-months
-                    (+
-                      (* 28 (:month gormanic))
-                      (:day gormanic)))
-          )
+          (+ (* (- (:month gormanic) 1) 28) (:day gormanic)))
    :year (:year gormanic)})
-
-(defn gormanic-to-string [gormanic]
-  (if (:intermission gormanic)
-    (str "Intermission " (:year gormanic))
-    (str (:day gormanic) " " (gormanic-months (:month gormanic)) " " (:year gormanic))))
 
 (defn parts-to-gormanic [parts]
   (let [day (:day parts)]
@@ -47,8 +38,25 @@
        :month (gormanic-month-index day)
        :day (gormanic-day-index day)})))
 
-(defn convert
+(defn gormanic-to-string [gormanic]
+  (if (:intermission gormanic)
+    (str "Intermission " (:year gormanic))
+    (str (:day gormanic) " "
+         (gormanic-months (- (:month gormanic) 1) ) " "
+         (:year gormanic))))
+
+(defn gregorian-to-gormanic
   [gregorian]
-  (gormanic-to-string
-    (parts-to-gormanic
-      (gregorian-to-parts gregorian))))
+  (parts-to-gormanic
+    (gregorian-to-parts gregorian)))
+
+(defn gregorian-to-gormanic-string
+  [gregorian]
+  (gormanic-to-string (gregorian-to-gormanic gregorian)))
+
+(defn parts-to-gregorian [parts]
+  (.plusDays (t/date-time (:year parts) 1 1) (- (:day parts) 1) ))
+
+(defn gormanic-to-gregorian
+  [gormanic]
+  (parts-to-gregorian (gormanic-to-parts gormanic)))
